@@ -7,13 +7,13 @@ heroes=heroes_data
 router=APIRouter()
 
 
-@router.post("/")
+@router.post("")
 def set_hero(hero: Hero):
     heroes.append(hero)
     return heroes
 
 
-@router.get("/")
+@router.get("")
 def list_heroes():
     return heroes
 
