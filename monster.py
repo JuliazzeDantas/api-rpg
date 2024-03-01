@@ -42,7 +42,7 @@ def hurt_monster(monster_id:UUID, hit:Hit):
         if character.id==monster_id:
             character.hp=character.take_damage(hit)
             if character.hp<=0:
-                kill_monster()
+                kill_monster(character)
                 return 0
             else:
                 return character.hp
@@ -58,5 +58,5 @@ def monster_atack(monster_id:UUID):
         
     raise HTTPException(status_code=404, detail=f"Monster ID {monster_id} was not found")
 
-def kill_monster():
-    pass
+def kill_monster(monster):
+    monsters.remove(monster)

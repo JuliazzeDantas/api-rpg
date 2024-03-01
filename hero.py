@@ -43,7 +43,7 @@ def hurt_hero(hero_id:UUID, hit:Hit):
         if character.id==hero_id:
             character.hp=character.take_damage(hit)
             if character.hp<=0:
-                kill_hero()
+                kill_hero(character)
                 return 0
             else:
                 return character.hp
@@ -61,5 +61,5 @@ def normal_atack(hero_id:UUID):
     raise HTTPException(status_code=404, detail=f"Hero ID {hero_id} was not found")
 
 
-def kill_hero():
-    pass
+def kill_hero(hero):
+    heroes.remove(hero)
