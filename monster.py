@@ -37,7 +37,7 @@ def get_monster_hp(monster_id:UUID):
 
 
 @router.put("/{monster_id}/damage")
-async def hurt_monster(monster_id:UUID, hit:Hit):
+def hurt_monster(monster_id:UUID, hit:Hit):
     for character in monsters:
         if character.id==monster_id:
             character.hp=character.take_damage(hit)
@@ -46,6 +46,7 @@ async def hurt_monster(monster_id:UUID, hit:Hit):
                 return 0
             else:
                 return character.hp
+            
     raise HTTPException(status_code=404, detail=f"Monster ID {monster_id} was not found")
 
 @router.post("/{monster_id}/atack")
@@ -53,7 +54,8 @@ def monster_atack(monster_id:UUID):
     for character in monsters:
         if character.id==monster_id:
             damage=character.normal_atack()
-
+            return damage
+        
     raise HTTPException(status_code=404, detail=f"Monster ID {monster_id} was not found")
 
 def kill_monster():

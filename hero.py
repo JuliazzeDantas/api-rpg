@@ -19,12 +19,13 @@ def list_heroes():
     return heroes
 
 
-@router.get("/{hero_id}", response_model=Hero)
+@router.get("/{hero_id}")
 def get_hero(hero_id:UUID)->Hero:
-    if hero_id < len(heroes):
-        return heroes[hero_id]
-    else:
-        raise HTTPException(status_code=404, detail=f"Hero ID {hero_id} was not found")
+    for character in heroes:
+        if character.id==hero_id:
+            return character
+        
+    raise HTTPException(status_code=404, detail=f"Hero ID {hero_id} was not found")
     
 
 @router.get("/{hero_id}/hp")
@@ -47,14 +48,15 @@ def hurt_hero(hero_id:UUID, hit:Hit):
             else:
                 return character.hp
             
-    raise HTTPException(status_code=404, detail=f"Hero ID {hero_id} was not found")
+    raise HTTPException(status_code=404, detail=f"Monster ID {hero_id} was not found")
 
 
-@router.post("/{hero_id/damage}")
+@router.post("/{hero_id}/damage")
 def normal_atack(hero_id:UUID):
     for character in heroes:
         if character.id==hero_id:
             damage=character.normal_atack()
+            return damage
 
     raise HTTPException(status_code=404, detail=f"Hero ID {hero_id} was not found")
 
