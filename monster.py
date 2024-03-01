@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from models import Monster
+from uuid import UUID
+from models import Monster,Hit
 from data import monsters_data
 
 monsters=monsters_data
@@ -8,19 +9,52 @@ router=APIRouter()
 
 
 @router.post("")
-def set_monster(monster: Monster):
+def create_monster(monster: Monster):
     monsters.append(monster)
     return monsters
 
 
 @router.get("")
-def list_monster():
+def list_monsters():
     return monsters
 
 
 @router.get("/{monster_id}", response_model=Monster)
 def get_monster(monster_id:int)->Monster:
-    if monster_id < len(monsters):
+    try:
         return monsters[monster_id]
-    else:
-        raise HTTPException(status_code=404, detail=f"There isn't id {monster_id}")
+    except Exception:
+        raise HTTPException(status_code=404, detail=f"Monster ID {monster_id} was not found")
+    
+
+@router.get("/{monster_id}/hp")
+def get_monster_hp(monster_id:UUID):
+    for monster in monsters:
+        if monster.id==monster_id:
+            return monster.hp
+    
+    raise HTTPException(status_code=404, detail=f"Monster ID {monster_id} was not found")
+
+
+@router.put("/{monster_id}/damage")
+async def hurt_monster(monster_id:UUID, hit:Hit):
+    for character in monsters:
+        if character.id==monster_id:
+            character.hp=character.take_damage(hit)
+            if character.hp<=0:
+                kill_monster()
+                return 0
+            else:
+                return character.hp
+    raise HTTPException(status_code=404, detail=f"Monster ID {monster_id} was not found")
+
+@router.post("/{monster_id}/atack")
+def monster_atack(monster_id:UUID):
+    for character in monsters:
+        if character.id==monster_id:
+            damage=character.normal_atack()
+
+    raise HTTPException(status_code=404, detail=f"Monster ID {monster_id} was not found")
+
+def kill_monster():
+    pass
