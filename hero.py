@@ -9,18 +9,18 @@ router=APIRouter()
 
 
 @router.post("")
-def create_hero(hero: Hero):
+async def create_hero(hero: Hero):
     heroes.append(hero)
     return heroes
 
 
 @router.get("")
-def list_heroes():
+async def list_heroes():
     return heroes
 
 
 @router.get("/{hero_id}")
-def get_hero(hero_id:UUID)->Hero:
+async def get_hero(hero_id:UUID)->Hero:
     for character in heroes:
         if character.id==hero_id:
             return character
@@ -29,7 +29,7 @@ def get_hero(hero_id:UUID)->Hero:
     
 
 @router.get("/{hero_id}/hp")
-def get_hero_hp(hero_id:UUID):
+async def get_hero_hp(hero_id:UUID):
     for character in heroes:
         if character.id==hero_id:
             return character.hp
@@ -38,7 +38,7 @@ def get_hero_hp(hero_id:UUID):
 
 
 @router.put("/{hero_id}/damage")
-def hurt_hero(hero_id:UUID, hit:Hit):
+async def hurt_hero(hero_id:UUID, hit:Hit):
     for character in heroes:
         if character.id==hero_id:
             character.hp=character.take_damage(hit)
@@ -52,7 +52,7 @@ def hurt_hero(hero_id:UUID, hit:Hit):
 
 
 @router.post("/{hero_id}/damage")
-def normal_atack(hero_id:UUID):
+async def normal_atack(hero_id:UUID):
     for character in heroes:
         if character.id==hero_id:
             damage=character.normal_atack()
@@ -61,5 +61,5 @@ def normal_atack(hero_id:UUID):
     raise HTTPException(status_code=404, detail=f"Hero ID {hero_id} was not found")
 
 
-def kill_hero(hero):
+async def kill_hero(hero):
     heroes.remove(hero)
