@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from uuid import UUID
-from models import Hero, Hit
+from character import Hero, Hit
 from data import heroes_data
 
 heroes=heroes_data

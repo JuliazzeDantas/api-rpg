@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from uuid import UUID
-from models import Monster,Hit
+from character import Monster,Hit
 from data import monsters_data
 
 monsters=monsters_data
